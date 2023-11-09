@@ -13,7 +13,6 @@ const paymentRouter = require('./src/routes/payments');
 const orderRouter = require('./src/routes/order');
 const productRouter = require('./src/routes/products');
 const sessionRouter = require('./src/routes/session');
-// const port = process.env.PORT || 8000;
 const app = express();
 
 // view engine setup
@@ -33,7 +32,7 @@ app.use('/users', usersRouter);
 app.use('/checkout', checkoutRouter);
 app.use('/payments', paymentRouter);
 app.use('/order', orderRouter);
-app.use('/products', productRouter);
+app.use('/product', productRouter);
 app.use('/session', sessionRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
