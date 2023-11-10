@@ -5,10 +5,10 @@ const productsController = require('../controllers/productsController');
 const authController = require('../controllers/authenticationController');
 
 // Route to get all products
-router.get('/', authController.isAuthenticated, productsController.getAllProducts);
+router.get('/', productsController.getAllProducts);
 
 // Route to get a specific product by ID
-router.get('/:id', authController.isAuthenticated, productsController.getProductById);
+router.get('/:id', productsController.getProductById);
 
 // Route to add a new product
 router.post('/', authController.isAuthenticated, productsController.createProduct);
