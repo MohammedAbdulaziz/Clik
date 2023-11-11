@@ -1,27 +1,27 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const Order = require('./Order');
-const Product = require('./Product');
+const Order = require("./Order");
+const Product = require("./Product");
 const addressSchema = new mongoose.Schema({
     street: String,
     city: String,
     state: String,
-    zipcode: String
+    zipcode: String,
 });
 
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
     },
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     password: {
         type: String,
-        required: true
+        required: true,
     },
     address: addressSchema,
     phoneNumber: String,
@@ -29,10 +29,10 @@ const userSchema = new mongoose.Schema({
     wishlist: [Product.productSchema],
     createdAt: {
         type: Date,
-        default: Date.now
-    }
+        default: Date.now,
+    },
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
