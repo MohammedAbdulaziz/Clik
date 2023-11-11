@@ -36,7 +36,7 @@ async function addToCart(req, res) {
 
         // Check if product already exists in cart
         const existingProduct = cart.products.find(
-            (product) => product.product.toString() === productId
+            (product) => product.productId.toString() === productId
         );
 
         if (existingProduct) {
@@ -44,7 +44,7 @@ async function addToCart(req, res) {
             existingProduct.quantity += quantity;
         } else {
             // If product doesn't exist, add it to the cart
-            cart.products.push({ product: productId, quantity: quantity });
+            cart.products.push({ productId: productId, quantity: quantity });
         }
 
         await cart.save();
@@ -65,7 +65,7 @@ async function removeFromCart(req, res) {
         const cart = await Cart.findOne({ user: userId });
         // Check if product exists in cart
         const existingProduct = cart.products.findIndex(
-            (product) => product.product.toString() === productId
+            (product) => product.productId.toString() === productId
         );
         console.log(existingProduct);
         if (existingProduct === -1) {
@@ -96,7 +96,7 @@ async function modifyCartQuantity(req, res) {
 
         // Check if product exists in cart
         const existingProductIndex = cart.products.findIndex(
-            (product) => product.product.toString() === productId
+            (product) => product.productId.toString() === productId
         );
 
         if (existingProductIndex === -1) {
