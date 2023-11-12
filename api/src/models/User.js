@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 
-const Order = require("./Order");
-const Product = require("./Product");
 const addressSchema = new mongoose.Schema({
     street: String,
     city: String,
@@ -25,8 +23,22 @@ const userSchema = new mongoose.Schema({
     },
     address: addressSchema,
     phoneNumber: String,
-    orders: [Order.orderSchema],
-    wishlist: [Product.productSchema],
+    orders: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Order",
+        },
+    ],
+    wishlist: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+        },
+    ],
+    cart: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Cart",
+    },
     createdAt: {
         type: Date,
         default: Date.now,

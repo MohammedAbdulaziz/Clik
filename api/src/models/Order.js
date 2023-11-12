@@ -19,30 +19,7 @@ const addressSchema = new mongoose.Schema({
     },
 });
 
-const itemSchema = new mongoose.Schema({
-    productId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-    },
-    productName: {
-        type: String,
-        required: true,
-    },
-    quantity: {
-        type: Number,
-        required: true,
-    },
-    price: {
-        type: Number,
-        required: true,
-    },
-});
-
 const orderSchema = new mongoose.Schema({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -51,7 +28,15 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    items: [itemSchema],
+    items: [
+        {
+            productId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Product",
+                required: true,
+            },
+        },
+    ],
     subtotal: {
         type: Number,
         required: true,
@@ -97,4 +82,4 @@ const orderSchema = new mongoose.Schema({
 
 const Order = mongoose.model("Order", orderSchema);
 
-module.exports = { Order, orderSchema };
+module.exports = Order;

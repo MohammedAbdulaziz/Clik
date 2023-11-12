@@ -6,7 +6,7 @@ async function getCart(req, res) {
 
     try {
         const cart = await Cart.findOne({ user: userId }).populate(
-            "products.product",
+            "products.productId",
             "name price mainImageUrl"
         );
 

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const productsController = require("../controllers/productsController");
-const authMiddleware = require("../middlewares/authMiddleWare");
+const isAuthenticated = require("../middlewares/authMiddleWare");
 
 // Route to get all products
 router.get("/", productsController.getAllProducts);
@@ -11,9 +11,9 @@ router.get("/", productsController.getAllProducts);
 router.get("/:id", productsController.getProductById);
 
 // Route to add a new product
-router.post("/", authMiddleware, productsController.createProduct);
+router.post("/", isAuthenticated, productsController.createProduct);
 
 // Route to edit an existing product
-router.put("/:id", authMiddleware, productsController.editProduct);
+router.put("/:id", isAuthenticated, productsController.editProduct);
 
 module.exports = router;

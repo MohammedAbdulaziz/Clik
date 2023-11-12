@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-function authMiddleware(req, res, next) {
+function isAuthenticated(req, res, next) {
     // Get the token from the request headers
     const token = req.headers.authorization;
     // Check if token is present
@@ -23,4 +23,4 @@ function authMiddleware(req, res, next) {
     }
 }
 
-module.exports = authMiddleware;
+module.exports = isAuthenticated;

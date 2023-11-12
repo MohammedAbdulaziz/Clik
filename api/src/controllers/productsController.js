@@ -1,11 +1,11 @@
 // Import the Product model
-const ProductModel = require("../models/Product");
+const Product = require("../models/Product");
 
 // Function to create a new product
 async function createProduct(req, res) {
     try {
         // Create a new product with the request body
-        const product = new ProductModel.Product(req.body);
+        const product = new Product(req.body);
         // Save the product to the database
         await product.save();
         // Return the saved product
@@ -20,7 +20,7 @@ async function createProduct(req, res) {
 async function editProduct(req, res) {
     try {
         // Find the product by ID
-        const product = await ProductModel.Product.findById(req.params.id);
+        const product = await Product.findById(req.params.id);
         // Update the product with the request body
         Object.assign(product, req.body);
         // Save the updated product to the database
@@ -37,7 +37,7 @@ async function editProduct(req, res) {
 async function getAllProducts(req, res) {
     try {
         // Find all products in the database
-        const products = await ProductModel.Product.find();
+        const products = await Product.find();
         // Return the products
         res.json(products);
     } catch (error) {
@@ -50,7 +50,7 @@ async function getAllProducts(req, res) {
 async function getProductById(req, res) {
     try {
         // Find the product by ID
-        const product = await ProductModel.Product.findById(req.params.id);
+        const product = await Product.findById(req.params.id);
         // Return the product
         res.json(product);
     } catch (error) {

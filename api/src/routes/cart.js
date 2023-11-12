@@ -1,24 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const cartController = require("../controllers/cartController");
-const authMiddleware = require("../middlewares/authMiddleWare");
+const isAuthenticated = require("../middlewares/authMiddleWare");
 // Get cart
-router.get("/", authMiddleware, cartController.getCart);
+router.get("/", isAuthenticated, cartController.getCart);
 
 // Add product to cart
-router.post("/add", authMiddleware, cartController.addToCart);
+router.post("/add", isAuthenticated, cartController.addToCart);
 
 // Remove product from cart
 router.delete(
     "/remove/:productId",
-    authMiddleware,
+    isAuthenticated,
     cartController.removeFromCart
 );
 
 // Modify product quantity in cart
 router.patch(
     "/modify/:productId",
-    authMiddleware,
+    isAuthenticated,
     cartController.modifyCartQuantity
 );
 
