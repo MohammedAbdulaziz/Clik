@@ -5,23 +5,44 @@ const generateOrderNumber = require("../middlewares/orderMiddleWare");
 // Create a new order
 async function createOrder(req, res) {
     try {
-        const order = new Order(req.body);
+        let order = {
+            userId: req.user.userId,
+            orderNumber: generateOrderNumber(),
+            items: req.body.items,
+            shippingAddress: req.body.shippingAddress,
+            paymentMethod: req.body.paymentMethod,
+            paymentStatus: req.body.paymentStatus,
+            subtotal: 0,
+            total: 0,
+            tax: 0,
+            shippingCost: 0,
+            orderStatus: "Created",
+            orderDate: req.body.orderDate,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+
+        order = new Order(order);
+        await order.populate("items.productId", "name price mainImageUrl");
+        order.subtotal = orderService.calculateSubtotal(order.items);
+        const { totalPrice, tax } = orderService.calculateTotalPrice(
+            order.subtotal
+        );
+        order.total = totalPrice;
+        order.tax = tax;
+        order.shippingCost = orderService.shippingPrice;
         await order.save();
         res.status(201).json(order);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error(error);
+        res.status(400).json({ error: "Server error" });
     }
 }
 
 async function createOrderFromCart(req, res) {
     const userId = req.user.userId;
-    const {
-        shippingAddress,
-        paymentMethod,
-        paymentStatus,
-        orderStatus,
-        orderDate,
-    } = req.body;
+    const { shippingAddress, paymentMethod, paymentStatus, orderDate } =
+        req.body;
 
     try {
         const cart = await Cart.findOne({ user: userId }).populate(
@@ -55,7 +76,7 @@ async function createOrderFromCart(req, res) {
             shippingAddress: shippingAddress,
             paymentMethod: paymentMethod,
             paymentStatus: paymentStatus,
-            orderStatus: orderStatus,
+            orderStatus: "Created",
             orderDate: orderDate,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -77,11 +98,11 @@ async function createOrderFromCart(req, res) {
 // Cancel an order
 async function cancelOrder(req, res) {
     try {
-        const order = await Order.findById(req.params.orderId);
+        const order = await Order.findOne({ orderNumber: req.params.orderId });
         if (!order) {
             return res.status(404).json({ error: "Order not found" });
         }
-        order.status = "cancelled";
+        order.orderStatus = "Cancelled";
         await order.save();
         res.json(order);
     } catch (error) {
@@ -92,16 +113,21 @@ async function cancelOrder(req, res) {
 // Edit an order
 async function editOrder(req, res) {
     try {
-        const order = await Order.findById(req.params.id);
+        const order = await Order.findOne({ orderNumber: req.params.orderId });
         if (!order) {
             return res.status(404).json({ error: "Order not found" });
         }
         if (req.body.items) {
             order.items = req.body.items;
         }
-        if (req.body.quantity) {
-            order.quantity = req.body.quantity;
-        }
+        await order.populate("items.productId", "name price mainImageUrl");
+        // Recalculate subtotal and total
+        order.subtotal = orderService.calculateSubtotal(order.items);
+        const { totalPrice, tax } = orderService.calculateTotalPrice(
+            order.subtotal
+        );
+        order.total = totalPrice;
+        order.tax = tax;
         await order.save();
         res.json(order);
     } catch (error) {
@@ -122,7 +148,7 @@ async function getAllOrders(req, res) {
 // Get a single order
 async function getOrder(req, res) {
     try {
-        const order = await Order.findById(req.params.orderId);
+        const order = await Order.findOne({ orderNumber: req.params.orderId });
         if (!order) {
             return res.status(404).json({ error: "Order not found" });
         }

@@ -7,7 +7,7 @@ const isAuthenticated = require("../middlewares/authMiddleWare");
 router.get("/", isAuthenticated, orderController.getAllOrders);
 
 // GET a specific order by ID
-router.get("/:id", isAuthenticated, orderController.getOrder);
+router.get("/:orderId", isAuthenticated, orderController.getOrder);
 
 // POST a new order
 router.post("/", isAuthenticated, orderController.createOrder);
@@ -16,10 +16,10 @@ router.post("/", isAuthenticated, orderController.createOrder);
 router.post("/cart", isAuthenticated, orderController.createOrderFromCart);
 
 // PUT (update) an existing order by ID
-router.put("/:id", isAuthenticated, orderController.editOrder);
+router.put("/:orderId", isAuthenticated, orderController.editOrder);
 
-// DELETE an existing order by ID
-router.delete("/:id", isAuthenticated, orderController.cancelOrder);
+// cancel an existing order by ID
+router.patch("/:orderId", isAuthenticated, orderController.cancelOrder);
 
 // Export the router
 module.exports = router;
