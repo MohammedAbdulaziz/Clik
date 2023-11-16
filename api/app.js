@@ -12,7 +12,6 @@ const checkoutRouter = require("./src/routes/checkout");
 const paymentRouter = require("./src/routes/payments");
 const orderRouter = require("./src/routes/order");
 const productRouter = require("./src/routes/products");
-const sessionRouter = require("./src/routes/session");
 const cartRouter = require("./src/routes/cart");
 const app = express();
 
@@ -34,7 +33,6 @@ app.use("/checkout", checkoutRouter);
 app.use("/payments", paymentRouter);
 app.use("/order", orderRouter);
 app.use("/product", productRouter);
-app.use("/session", sessionRouter);
 app.use("/cart", cartRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
